@@ -18,6 +18,11 @@ class Map
 		int type;
 		Sprite sprite;
 	};
+	struct Rect_
+	{
+		RectangleShape rect;
+
+	};
 
 	Block block;
 	
@@ -26,6 +31,7 @@ class Map
 public:
 	int count_blocks = 0;
 	vector<Block> blocks;
+	vector<Rect_> touch_r;
 
 	Map(RenderWindow* window) {
 		this->window = window;
@@ -62,35 +68,15 @@ public:
 		}
 		map_file.close();
 
-		ifstream map_file_try("map.plat");
-		map_file_try >> count_blocks;
+		ifstream touch_file("touch.plat");
+		touch_file >> count_blocks;
 
-		blocks[0].x = blocks[0].sprite.getPosition().x;
-
-		for (int i = 0; i < count_blocks / 2; i++) {
-
-			int x1;
-			int y1;
-			int type1;
-			map_file_try >> type1;
-			map_file_try >> x1;
-			map_file_try >> y1;
-
-			int type2;
-			int x2;
-			int y2;
-
-			map_file_try >> type2;
-			map_file_try >> x2;
-			map_file_try >> y2;
-
-			if (y1 == y2 && type1 == type2 && x1+32 == x2) {
-				blocks[i+1].x = x1-16;
-			}
-			else {
-				blocks[i + 1].x = blocks[i + 1].sprite.getPosition().x;
-			}
-
+		for (int i = 0; i < count_blocks; i++) {
+			Rect_ buff_rect;
+			int x, y, w, h;
+			touch_file >> x;
+			touch_file >> y;
+			buff_rect.rect.setPosition(x, y);
 
 		}
 

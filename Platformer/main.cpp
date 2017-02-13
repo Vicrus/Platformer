@@ -13,11 +13,11 @@
 
 using namespace std;
 using namespace sf;
-bool touch(Player* player, Map* map, int* num) {
+bool touch(Player* player, Map* map, int* num, int height, int width) {
 	int count = 0;
 	for (int i = 0; i < map->blocks.size(); i++) {
-		if (fabs(player->y - map->blocks[i].sprite.getPosition().y) <= (player->rect_height/2 + 16) &&
-			fabs(player->x - map->blocks[i].sprite.getPosition().x) <= (player->rect_width / 2 + 16)) {
+		if (fabs(player->y - map->blocks[i].sprite.getPosition().y) <= (player->rect_height/2 + height) &&
+			fabs(player->x - map->blocks[i].sprite.getPosition().x) <= (player->rect_width / 2 + width)) {
 			count++;
 			*num = i;
 		}	
@@ -77,7 +77,7 @@ int main()
 		time = clock.getElapsedTime().asMilliseconds();
 		clock.restart();
 		player.update(time);
-		bool istouch = touch(&player, &map, &num_block);
+		bool istouch = touch(&player, &map, &num_block, 16, 16);
 		//cout << istouch << endl;
 		do_not_touch(&player, &map, istouch, num_block);
 		
