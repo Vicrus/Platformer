@@ -28,8 +28,8 @@ class Player
 	int count = 0;
 	
 public:
-	int x = 200;
-	int y = 200;
+	int x = 100;
+	int y = 100;
 	int rect_height = 62;
 	int rect_width = 52;
 	int direction = RIGHT;

@@ -33,7 +33,29 @@ bool touch(Player* player, Map* map, int* num) {
 }
 
 void do_not_touch(Player* player, Map* map, bool touch, int num) {
+	if (touch) {
+		int px = player->x; 
+		int py = player->y;
+		int pH = player->rect_height;
+		int pW = player->rect_width;
+		int dir_pl = player->direction;
 
+		for (int i = 0; i < map->touch_r.size(); i++) {
+			int mx = map->touch_r[i].rect.getPosition().x;
+			int my = map->touch_r[i].rect.getPosition().y;
+			int mH = map->touch_r[i].rect.getSize().y;
+			int mW = map->touch_r[i].rect.getSize().x;
+
+			if (dir_pl == DOWN && py + pH / 2 <= my - mH / 2) {
+				cout << "Down";
+			}
+			/*else if (p) {
+
+			}*/
+		}
+
+
+	}
 
 }
 int main()
@@ -64,7 +86,7 @@ int main()
 		clock.restart();
 		player.update(time);
 		bool istouch = touch(&player, &map, &num_block);
-		cout << istouch << endl;
+		//cout << istouch << endl;
 		do_not_touch(&player, &map, istouch, num_block);
 		
 
