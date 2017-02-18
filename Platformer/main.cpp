@@ -13,17 +13,19 @@
 
 using namespace std;
 using namespace sf;
-bool touch(Player* player, Map* map, int* num, int height, int width) {
+bool touch(Player* player, Map* map, int* num) {
 	int count = 0;
-	for (int i = 0; i < map->blocks.size(); i++) {
-		if (fabs(player->y - map->blocks[i].sprite.getPosition().y) <= (player->rect_height/2 + height) &&
-			fabs(player->x - map->blocks[i].sprite.getPosition().x) <= (player->rect_width / 2 + width)) {
+	for (int i = 0; i < map->touch_r.size(); i++) {
+		if (fabs(player->y - map->touch_r[i].rect.getPosition().y) <= (player->rect_height/2 + map->touch_r[i].rect.getSize().y/2) &&
+			fabs(player->x - map->touch_r[i].rect.getPosition().x) <= (player->rect_width/2 + map->touch_r[i].rect.getSize().x/2)) {
 			count++;
 			*num = i;
+			
 		}	
 	}
 	if (count > 0) {
 		return true;
+		
 	}
 	else {
 		return false;
@@ -31,23 +33,7 @@ bool touch(Player* player, Map* map, int* num, int height, int width) {
 }
 
 void do_not_touch(Player* player, Map* map, bool touch, int num) {
-	if (touch && player->x < map->blocks[num].sprite.getPosition().x ) {
-		if (player->y <= map->blocks[num].sprite.getPosition().y) {
-			player->y = map->blocks[num].sprite.getPosition().y - player->rect_height / 2 - 16;
-			cout << map->blocks[num].x << endl;
-		}
-		else if (player->y >= map->blocks[num].sprite.getPosition().y) {
-			player->y = map->blocks[num].sprite.getPosition().y + player->rect_height / 2 + 16;
-		}
-	}
-	if(touch && player->x + player->rect_width/2 +16 <= map->blocks[num].sprite.getPosition().x){
-		if (touch && player->x < map->blocks[num].sprite.getPosition().x) {
-			player->x = map->blocks[num].sprite.getPosition().x - player->rect_width / 2 - 16-1;
-		}
-		else if (touch) {
 
-		}
-	}
 
 }
 int main()
@@ -77,8 +63,8 @@ int main()
 		time = clock.getElapsedTime().asMilliseconds();
 		clock.restart();
 		player.update(time);
-		bool istouch = touch(&player, &map, &num_block, 16, 16);
-		//cout << istouch << endl;
+		bool istouch = touch(&player, &map, &num_block);
+		cout << istouch << endl;
 		do_not_touch(&player, &map, istouch, num_block);
 		
 

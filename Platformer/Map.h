@@ -59,15 +59,15 @@ public:
 			map_file >> x;
 			map_file >> y;
 
-			x = x - 16;
-			y = y - 16;
+			x = x + 16;
+			y = y + 16;
 
 			this->blocks[i].sprite.setOrigin(16, 16);
 			this->blocks[i].sprite.setPosition(x, y);
 
 		}
 		map_file.close();
-
+		
 		ifstream touch_file("touch.plat");
 		touch_file >> count_blocks;
 
@@ -76,7 +76,17 @@ public:
 			int x, y, w, h;
 			touch_file >> x;
 			touch_file >> y;
-			buff_rect.rect.setPosition(x, y);
+			touch_file >> w;
+			touch_file >> h;
+
+			x = x + w / 2;
+			y = y + h / 2;
+
+			buff_rect.rect.setFillColor(Color::Red);
+			buff_rect.rect.setSize(Vector2f(w,h));
+			buff_rect.rect.setOrigin(w / 2, h / 2);
+			buff_rect.rect.setPosition(x,y);
+			touch_r.push_back(buff_rect);
 
 		}
 
@@ -86,6 +96,9 @@ public:
 		for (int i = 0; i < this->blocks.size(); i++) {
 			this->window->draw(this->blocks[i].sprite);
 		}
+		/*for (int i = 0; i < this->touch_r.size(); i++) {
+			this->window->draw(touch_r[i].rect);
+		}*/
 	}
 };
 
