@@ -46,9 +46,21 @@ void do_not_touch(Player* player, Map* map, bool touch, int num) {
 			int mH = map->touch_r[i].rect.getSize().y;
 			int mW = map->touch_r[i].rect.getSize().x;
 
-			if (dir_pl == DOWN && py + pH / 2 <= my - mH / 2) {
-				cout << "Down";
+			if (dir_pl == DOWN && py + pH / 2 > my - mH / 2) {
+				cout << "UP" << endl;
 			}
+			else if (dir_pl == UP && py - pH /2 < my + mH / 2) {
+				cout << "DOWN" << endl;
+				player->y = my + mH/2 + pH/2;
+			}
+
+			if (dir_pl == RIGHT && px + pW / 2 < my - mW / 2) {
+				cout << "LEFT" << endl;
+			}
+			else if (dir_pl == LEFT && px - pW / 2 > my + mW / 2) {
+				cout << "RIGHT " << endl;
+			}
+
 			/*else if (p) {
 
 			}*/

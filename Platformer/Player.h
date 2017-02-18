@@ -32,7 +32,7 @@ public:
 	int y = 100;
 	int rect_height = 62;
 	int rect_width = 52;
-	int direction = RIGHT;
+	int direction = 0;
 	bool onGround = false;
 	bool jumping = false;
 	sf::RectangleShape rectangle;
@@ -78,7 +78,7 @@ public:
 			step(time);
 		}
 		else {
-			direction = RIGHT;
+			//direction = RIGHT;
 			count = 4;
 		}
 		
