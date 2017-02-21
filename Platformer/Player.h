@@ -32,6 +32,8 @@ public:
 	int y = 100;
 	int rect_height = 62;
 	int rect_width = 52;
+	int playerH = rect_height;
+	int playerW = rect_width - rect_width / 2;
 	int direction = 0;
 	bool onGround = false;
 	bool jumping = false;
@@ -91,13 +93,8 @@ public:
 	}
 
 	void setPos(int x, int y) {
-		rectangle.setSize(sf::Vector2f(rect_width, rect_height));
-		rectangle.setFillColor(Color::Transparent);
-		rectangle.setOutlineColor(sf::Color::Red);
-		rectangle.setOutlineThickness(1);
-		rectangle.setOrigin(rect_width/2, rect_height/2);
-		rectangle.setPosition(x, y);
-
+		
+		playerRect(false, x,y);
 		this->x = x;
 		this->y = y;
 		this->player.setPosition(this->x, this->y);
@@ -128,7 +125,16 @@ public:
 		
 	}
 
-
+	void playerRect(bool ison, int x, int y) {
+		if (ison) {
+			rectangle.setSize(sf::Vector2f(playerW, playerH));
+			rectangle.setFillColor(Color::Transparent);
+			rectangle.setOutlineColor(sf::Color::Red);
+			rectangle.setOutlineThickness(1);
+			rectangle.setOrigin(playerW / 2, playerH / 2);
+			rectangle.setPosition(x, y);
+		}
+	}
 };
 
 

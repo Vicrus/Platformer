@@ -89,7 +89,7 @@ public:
 			touch_r.push_back(buff_rect);
 
 		}
-
+		touch_file.close();
 	}
 
 	void draw() {
