@@ -3,6 +3,11 @@
 #define UP    3
 #define DOWN  4
 
+#define DOWN_LEFT  5
+#define DOWN_RIGHT 6
+#define UP_LEFT    7
+#define UP_RIGHT   8
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
@@ -14,6 +19,7 @@ using namespace std;
 using namespace sf;
 bool check = true;
 
+
 void do_not_touch(Player* player, Map* map, bool touch, int num) {
 	if (touch) {
 		int px = player->x;
@@ -21,6 +27,9 @@ void do_not_touch(Player* player, Map* map, bool touch, int num) {
 		int pH = player->rect_height;
 		int pW = player->playerW;
 		int dir_pl = player->direction;
+		if (dir_pl == DOWN_LEFT || dir_pl == DOWN_RIGHT) {
+			dir_pl = DOWN;
+		}
 		int mx = map->touch_r[num].rect.getPosition().x;
 		int my = map->touch_r[num].rect.getPosition().y;
 		int mH = map->touch_r[num].rect.getSize().y;
@@ -62,7 +71,6 @@ bool touch(Player* player, Map* map, int* num) {
 			count++;
 			*num = i;
 			s = i;
-			
 		}	
 	}
 	if (count > 0) {
@@ -74,6 +82,24 @@ bool touch(Player* player, Map* map, int* num) {
 		return false;
 	}
 }
+void gravity(bool istouch, Player* player, float time, bool* jump) {
+	if (!istouch && !*jump) {
+		player->gravity_on = true;
+		player->direction = DOWN;
+		player->setPos(player->x, player->y + time*0.3);
+	}
+	else if (*jump) {
+		player->gravity_on = false;
+		player->direction = UP;
+		player->jump(time);
+		if (player->gravity_time > 15) {
+			*jump = false;
+			player->gravity_time = 0;
+			player->direction = DOWN;
+			cout << "end" << endl;
+		}
+	}
+}
 
 
 
@@ -83,10 +109,11 @@ int main()
 	Clock clock;
 	float time;//время 
 	window.setVerticalSyncEnabled(true);
-	int sige = 0;
 	Player player(&window);
 	Map map(&window);
 	map.load_blocks();
+	bool jump = false;
+
 
 	int num_block = 0;
 	cout << map.touch_r[0].rect.getSize().x << endl;
@@ -98,6 +125,9 @@ int main()
 		while (window.pollEvent(event)){
 			if (event.type == Event::Closed || (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape))
 				window.close();
+			if (event.type == Event::KeyPressed && event.key.code == Keyboard::Space && !jump) {
+				jump = true;
+			}
 		}
 
 		window.clear();
@@ -106,7 +136,7 @@ int main()
 		player.update(time);
 		bool istouch = touch(&player, &map, &num_block);
 		
-
+		gravity(istouch, &player, time, &jump);
 		//cout << istouch << endl;
 		
 		

@@ -6,6 +6,11 @@
 #define UP    3
 #define DOWN  4
 
+#define DOWN_LEFT  5
+#define DOWN_RIGHT 6
+#define UP_LEFT    7
+#define UP_RIGHT   8
+
 using namespace sf;
 using namespace std;
 
@@ -35,8 +40,10 @@ public:
 	int playerH = rect_height;
 	int playerW = rect_width - rect_width / 2;
 	int direction = 0;
-	bool onGround = false;
-	bool jumping = false;
+
+	int gravity_time = 0;
+	bool gravity_on = false;
+
 	sf::RectangleShape rectangle;
 
 	Player(RenderWindow* window) {
@@ -53,14 +60,17 @@ public:
 		this->player.setTextureRect(IntRect(tex_x,tex_y,rect_width, rect_height));
 		
 	}
+
+	void jump(float time) {
+			direction = UP;
+			this->y -= time* 0.6;
+			setPos(this->x, this->y);
+			gravity_time++;
+	}
+
 	void update(float time) {
 
-		if (Keyboard::isKeyPressed(Keyboard::Space)) {
-			direction = UP;
-			this->y -= time*0.3;
-			step(time);
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Down)) {
+		if (Keyboard::isKeyPressed(Keyboard::Down)) {
 			direction = DOWN;
 			this->tex_y = 12;
 			this->y += time*0.3;
@@ -68,13 +78,23 @@ public:
 		}
 
 		else if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			direction = RIGHT;
+			if (gravity_on) {
+				direction = DOWN_RIGHT;
+			}
+			else {
+				direction = RIGHT;
+			}
 			this->tex_y = 165;
 			this->x += time*0.3;
 			step(time);
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			direction = LEFT;
+			if (gravity_on) {
+				direction = DOWN_LEFT;
+			}
+			else {
+				direction = LEFT;
+			}
 			this->tex_y = 90;
 			this->x -= time*0.3;
 			step(time);
@@ -88,9 +108,6 @@ public:
 		
 	}
 
-	void gravity(float time){
-
-	}
 
 	void setPos(int x, int y) {
 		
